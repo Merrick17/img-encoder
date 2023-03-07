@@ -2,6 +2,7 @@ const express = require("express");
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
+const cors = require("cors");
 const { promisify } = require("util");
 const readFile = promisify(fs.readFile);
 const unlinkFile = promisify(fs.unlink);
@@ -17,7 +18,7 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + path.extname(file.originalname));
   }
 });
-
+app.use(cors());
 const upload = multer({ storage: storage });
 
 app.post("/upload", upload.single("image"), async (req, res) => {

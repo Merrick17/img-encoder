@@ -25,7 +25,7 @@ const upload = multer({ storage: storage });
 app.post("/upload", upload.single("image"), async (req, res) => {
   try {
     const imageBuffer = await sharp(req.file.path)
-      .jpeg({ quality: 60 })
+      .resize({ width: 500 })
       .toBuffer();
     const base64Image = imageBuffer.toString("base64");
     await unlinkFile(req.file.path);

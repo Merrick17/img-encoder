@@ -6,6 +6,7 @@ const cors = require("cors");
 const { promisify } = require("util");
 const readFile = promisify(fs.readFile);
 const unlinkFile = promisify(fs.unlink);
+const sharp = require("sharp");
 
 const app = express();
 const port = 3500;
@@ -23,7 +24,7 @@ const upload = multer({ storage: storage });
 
 app.post("/upload", upload.single("image"), async (req, res) => {
   try {
-    const imageBuffer = await readFile(req.file.path);
+    const imageBuffer = await sharp(req.file.path).jpeg().toBuffer();
     const base64Image = imageBuffer.toString("base64");
     await unlinkFile(req.file.path);
     res.json({ img: base64Image });
